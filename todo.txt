@@ -1,0 +1,35 @@
+Add a move to target for object list. (Done)
+Stop zombies from moving into each other. (Done)
+Make a projectile with object. (done)
+make a zombie objectList.  (done)
+check if projectile has exited borders or hit zombie. (done)
+check if zombie hits players. Do this in the move all towards object maybe. (done)
+Make waves, add one zombie per wave. (done)
+Update based on zombie,player,projectile collision. (done)
+change footer text to match new controls. (done)
+
+add penatration to the gun, how many zombies it can kill before bullet deletes on hitting a zombie. Will have to do a new check for that. 
+
+add hp, decrease hp if zombie hit. (done)
+
+Stop zombies from spawning on player. Maybe increase zombie size, spawn zombie, decrease size, so it won't spawn on player. 
+or temporaly increase player size. Same as when we did collision dection. Save old size, update size, run colDec, update size to old size. Make this a safe zone,
+variable. (done) couldn't just started the grace Counter everytime a zombie spawns. 
+
+add a game over screen if player hp hits zero.
+
+maybe add the coins that can be picked up. (done) 
+
+maybe add the crate that can be shot than it will spawn coins. 
+
+zombies can get stuck in a diagonal line if they all need to move dianoally, maybe attempt to make zombie move foward than test for collision again. (done)
+
+upgrades to buy,
+bullet penatration, 
+bullet size, 
+player speed,
+
+
+make a alert text thing. //// Boss incoming \\\\ //// Shop open next wave \\\\ ect
+
+all zombie hits and zombie object deletes need to take place in the health bar object. (done)

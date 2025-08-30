@@ -1,0 +1,309 @@
+ moveTowardsTargetObject(object) {
+    ///Nothing will run if outOfBounce is true in this function,
+    ///Except what is below.
+    var outOfBouncelock = false;
+    if (this.y + this.height > canvasBottomYAxis) {
+      outOfBouncelock = true;
+      this.y = canvasBottomYAxis - this.height;
+    }
+    if (this.y < 0) {
+      outOfBouncelock = true;
+      this.y = 0;
+    }
+    if (this.x < 0) {
+      outOfBouncelock = true;
+      this.x = 0;
+    }
+    if (this.x + this.width > canvas.width) {
+      outOfBouncelock = true;
+      this.x = canvas.width - this.width;
+    }
+
+    if (!outOfBouncelock) {
+      if (object.isList) {
+        console.log("step 1");
+
+        ///Stops the CHARACTER from bouncing around when it gets close to the target.
+        ///Way better than last solution.
+        if (Math.abs(object.array[this.targetIndex]["x"] - this.x) < 5) {
+          this.x = object.array[this.targetIndex]["x"];
+        }
+        if (Math.abs(object.array[this.targetIndex]["y"] - this.y) < 5) {
+          this.y = object.array[this.targetIndex]["y"];
+        }
+
+        ///Coin collection
+        if (
+          object.array[this.targetIndex]["x"] == this.x &&
+          object.array[this.targetIndex]["y"] == this.y
+        ) {
+          ///call a seprate function here.
+          this.targetNewRanObjectInList(object);
+        }
+
+        ///If the object is a list.
+        if (this.targetIndex <= object.arrayLength) {
+          console.log("step 2");
+          if (this.targetIndex < object.arrayLength) {
+            console.log("step 3");
+            ///Diagonal movement
+            let lock = false;
+            if (
+              object.array[this.targetIndex]["x"] < this.x &&
+              object.array[this.targetIndex]["y"] < this.y &&
+              !lock
+            ) {
+              this.velocityY -= this.speed * deltaTime.time;
+              this.velocityX -= this.speed * deltaTime.time;
+              lock = true;
+            }
+            if (
+              object.array[this.targetIndex]["x"] > this.x &&
+              object.array[this.targetIndex]["y"] < this.y &&
+              !lock
+            ) {
+              this.velocityY -= this.speed * deltaTime.time;
+              this.velocityX += this.speed * deltaTime.time;
+              lock = true;
+            }
+            if (
+              object.array[this.targetIndex]["x"] > this.x &&
+              object.array[this.targetIndex]["y"] > this.y &&
+              !lock
+            ) {
+              this.velocityY += this.speed * deltaTime.time;
+              this.velocityX += this.speed * deltaTime.time;
+              lock = true;
+            }
+            if (
+              object.array[this.targetIndex]["x"] < this.x &&
+              object.array[this.targetIndex]["y"] > this.y &&
+              !lock
+            ) {
+              this.velocityY += this.speed * deltaTime.time;
+              this.velocityX -= this.speed * deltaTime.time;
+              lock = true;
+            }
+            ///Stright movement
+            if (object.array[this.targetIndex]["y"] < this.y && !lock) {
+              this.velocityY -= this.speed * deltaTime.time;
+            }
+            if (object.array[this.targetIndex]["x"] > this.x && !lock) {
+              this.velocityX += this.speed * deltaTime.time;
+            }
+            if (object.array[this.targetIndex]["y"] > this.y && !lock) {
+              this.velocityY += this.speed * deltaTime.time;
+            }
+            if (object.array[this.targetIndex]["x"] < this.x && !lock) {
+              this.velocityX -= this.speed * deltaTime.time;
+            }
+
+            ///Normalizes diagonal movement.
+            if (this.velocityX !== 0 && this.velocityY !== 0) {
+              this.velocityX * 0.6;
+              this.velocityY * 0.6;
+              console.log("step 4");
+            }
+
+            console.log(this.x, this.y, this.velocityX, this.velocityY);
+
+            ///Applies the velocity to the position
+            this.x += this.velocityX;
+            this.y += this.velocityY;
+
+            ///Resets velocity
+            this.velocityX = 0;
+            this.velocityY = 0;
+          }
+        } else {
+          console.log("CHARACTER target index outside of object list range.");
+        }
+      }
+      ///If the object is not a list.
+      else {
+        ///Stops the CHARACTER from bouncing around when it gets close to the target.
+        ///Way better than last solution.
+        if (Math.abs(object.x - this.x) < 5) {
+          this.x = object.x;
+        }
+        if (Math.abs(object.y - this.y) < 5) {
+          this.y = object.y;
+        }
+
+        ///Diagonal movement
+        let lock = false;
+        if (object.x < this.x && object.y < this.y && !lock) {
+          this.velocityY -= this.speed * deltaTime.time;
+          this.velocityX -= this.speed * deltaTime.time;
+          lock = true;
+        }
+        if (object.x > this.x && object.y < this.y && !lock) {
+          this.velocityY -= this.speed * deltaTime.time;
+          this.velocityX += this.speed * deltaTime.time;
+          lock = true;
+        }
+        if (object.x > this.x && object.y > this.y && !lock) {
+          this.velocityY += this.speed * deltaTime.time;
+          this.velocityX += this.speed * deltaTime.time;
+          lock = true;
+        }
+        if (object.x < this.x && object.y > this.y && !lock) {
+          this.velocityY += this.speed * deltaTime.time;
+          this.velocityX -= this.speed * deltaTime.time;
+          lock = true;
+        }
+        ///Stright movement
+        if (object.y < this.y && !lock) {
+          this.velocityY -= this.speed * deltaTime.time;
+        }
+        if (object.x > this.x && !lock) {
+          this.velocityX += this.speed * deltaTime.time;
+        }
+        if (object.y > this.y && !lock) {
+          this.velocityY += this.speed * deltaTime.time;
+        }
+        if (object.x < this.x && !lock) {
+          this.velocityX -= this.speed * deltaTime.time;
+        }
+
+        ///Normalizes diagonal movement.
+        if (this.velocityX !== 0 && this.velocityY !== 0) {
+          this.velocityX * 0.6;
+          this.velocityY * 0.6;
+        }
+
+        ///Applies the velocity to the position
+        this.x += this.velocityX;
+        this.y += this.velocityY;
+
+        ///Resets velocity
+        this.velocityX = 0;
+        this.velocityY = 0;
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ///Stopping self collision. 
+        var indexToColTest = 0; ///Stores the smallest index of the x and y value below. 
+        var numAndIndexHolderX = []; ///Stores the x[0] closest to our current index object out of the whole array and its index.[1]
+        var numAndIndexHolderY = []; ///Stores the y[0] closest to our current index object out of the whole array and its index.[1]
+
+
+        ///Holder for testing.
+        ///get closest two next
+        console.log("i" + i);
+        for (let j = 0; j < this.arrayLength; j++) { //X  i = current object for outer loop
+        if (j != i) {
+          
+        
+          if (j == 0) {
+            numAndIndexHolderX[0] = this.array[j]['x'];
+            numAndIndexHolderX[1] = j;
+          }
+          if (j > 0) {
+            if (Math.abs(this.array[j]['x'] - this.array[i]['x']) < Math.abs(numAndIndexHolderX[0] - this.array[j]['x'])  ) {
+            numAndIndexHolderX[0] = this.array[j]['x'];
+            numAndIndexHolderX[1] = j;
+            }
+          }
+        }
+        }
+        for (let j = 0; j < this.arrayLength; j++) { //X  i = current object for outer loop
+        if (j != i) {
+          if (j == 0) {
+            numAndIndexHolderY[0] = this.array[j]['y'];
+            numAndIndexHolderY[1] = j;
+          }
+          if (j > 0) {
+            if (Math.abs(this.array[j]['y'] - this.array[i]['y']) < Math.abs(numAndIndexHolderY[0] - this.array[j]['y'])  ) {
+            numAndIndexHolderY[0] = this.array[j]['y'];
+            numAndIndexHolderY[1] = j;
+            }
+          }
+        }
+        }
+
+        if (numAndIndexHolderX[0] > numAndIndexHolderY[0]) {
+          indexToColTest = numAndIndexHolderY[1];
+        }
+        if (numAndIndexHolderX[0] < numAndIndexHolderY[0]) {
+          indexToColTest = numAndIndexHolderX[1];
+        }
+        ///Everything done above so we only run collision dection on the closest object for each object in our array as the outer for loop runs. 
+     
+        console.log(indexToColTest);    
+        
+      
+
+        ///We will have to add this to every movement to test the future movement.
+        ///Will stop anything below from running, function call will end here if true.
+      //  console.log(collisionDetection(this.array[i],this.array[indexToColTest],false));
+       // if (!collisionDetection(this.array[indexToColTest],this.array[i],false)) {
+
+
+
+
+
+    for (let i = 0; i < obj2.arrayLength; i++) {
+      if (
+        obj1.x + obj1.width - obj2.array[i].x >= 0 &&
+        obj2.array[i].x + obj2.array[i].width - obj1.x >= 0 &&
+        obj1.y + obj1.height - obj2.array[i].y >= 0 &&
+        obj2.array[i].y + obj2.array[i].height - obj1.y >= 0
+      ) {
+        return [true, i];
+      }
+    }
+    return [false];
+
+
+
+
+
+
+
+
+    var outOfBouncelock = false;
+    if (this.y + this.height > canvasBottomYAxis) {
+      outOfBouncelock = true;
+      this.y = canvasBottomYAxis - this.height;
+    }
+    if (this.y < 0) {
+      outOfBouncelock = true;
+      this.y = 0;
+    }
+    if (this.x < 0) {
+      outOfBouncelock = true;
+      this.x = 0;
+    }
+    if (this.x + this.width > canvas.width) {
+      outOfBouncelock = true;
+      this.x = canvas.width - this.width;
+    }
+let arr = [1, 2, 3, 4, 3];
+arr = arr.filter(value => value !== 3);  // Removes all 3s
+console.log(arr);  // Output: [1, 2, 4]
